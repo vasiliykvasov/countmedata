@@ -1,0 +1,93 @@
+Sub CountMeData()
+
+' Переменные рядов
+Dim FirstRow As Long ' Первый ряд
+Dim CurrentRow As Long 'Текущий ряд
+Dim LastRow As Long 'Последний ряд
+FirstRow = 1
+CurrentRow = FirstRow
+LastRow = Selection.Rows.Count
+
+' Переменные колонок
+Dim FirstColumn As Long ' Первая колонка
+Dim CurrentColumn As Long 'Текущая колонка
+Dim LastColumn As Long 'Последняя колонка
+FirstColumn = 1
+CurrentColumn = FirstColumn
+LastColumn = Selection.Columns.Count
+
+' Переменные для операций над текущими ячейками вычислений
+Dim ActiveRow As Long 'Номер активного ряда
+Dim ActiveRangeRow As Range 'Диапазон активного ряда
+Dim ActiveRangeColumn As Range 'Диапазон колонки, в которой производятся выявление ячейки
+Dim ActiveCell As Range '
+
+' Переменные для получения и вывода данных
+Dim DataRange As String 'Диапазон ячеек для подстановки в формулу
+Dim DataColumn As Long 'Числовой номер колонки на листе
+Dim DataCell As String 'Функция на английском языке
+
+' Переменные, на случай, если в первой строке нужно поделить число из одного ряда на число из другого, нужно написать буквы рядов через :
+Dim LeftCell As String 'Буква слева от двоеточия
+Dim RightCell As String 'Буква справа от двоеточия
+
+' Цикл перебора колонок
+For CurrentColumn = FirstColumn To LastColumn
+Debug.Print "Текущий ряд - " & CurrentColumn
+Set ActiveRangeColumn = Range(Selection.Cells(FirstRow, CurrentColumn), Selection.Cells(LastRow, CurrentColumn)) ' Получаем диапазон активной колонки
+Debug.Print "Диапазон активной колонки = " & ActiveRangeColumn.Address
+
+Debug.Print " "
+
+'Цикл перебора рядов
+For CurrentRow = FirstRow To LastRow
+Set ActiveCell = Selection.Cells(CurrentRow, CurrentColumn) ' Получаем активную ячейку
+Debug.Print "Активная ячейка - " & ActiveCell.Address
+ActiveRow = ActiveCell.Row ' Получаем активный ряд
+Debug.Print "Активный ряд - " & ActiveRow
+
+' Проверяем вложенность активного ряда
+If Rows(ActiveRow).OutlineLevel = 1 Then
+Debug.Print "Не сгруппировано"
+DataRange = DataRange + ActiveCell.Address + ";" ' Если ряд не сгруппирован, дописываем его в Диапазон ячеек для подстановки в формулу
+Debug.Print DataRange
+End If
+
+Next CurrentRow ' Конец цикла перебора рядов
+
+Debug.Print " "
+
+DataColumn = Range(Selection.Cells(FirstRow, CurrentColumn), Selection.Cells(LastRow, CurrentColumn)).Column 'Получаем номер текущей колонки
+DataCell = Cells(1, DataColumn) ' Получаем значение ячейки с функцией на английском языке из первой ячейки колонки
+
+' Если в значении ячейки, где должна храниться функция - :
+If InStr(DataCell, ":") > 0 Then
+Debug.Print "Двоеточие"
+LeftCell = "$" & Left(DataCell, 1) & "$" & (ActiveRow + 1) 'Получаем адрес ячейки-делимого - слева от двоеточия
+RightCell = "$" & Right(DataCell, 1) & "$" & (ActiveRow + 1) 'Получаем адрес ячейки-делителя - справа от двоеточия
+Selection.Cells(LastRow + 1, CurrentColumn) = "=" & LeftCell & "/" & RightCell 'Применяем деление под активным диапазоном
+
+' Если в значении ячейки, где должна храниться функция - ОЧИСТИТЬ
+ElseIf DataCell = "ОЧИСТИТЬ" Then
+Debug.Print "Очистить"
+Selection.Cells(LastRow + 1, CurrentColumn) = "" 'Заполняем ячейку под активным диапазоном пустотой
+
+' Если значение ячейки, где должна храниться функция - СУММ
+ElseIf DataCell = "СУММ" Then
+Debug.Print "СУММ"
+Selection.Cells(LastRow + 1, CurrentColumn).FormulaLocal = "=СУММ(" & DataRange & ")" 'Применяем формулу СУММ для ранее записанного диапазона ячеек
+
+' Если значение ячейки, где должна храниться функция - СРЗНАЧ
+ElseIf DataCell = "СРЗНАЧ" Then
+Debug.Print "Не пустота"
+Selection.Cells(LastRow + 1, CurrentColumn).FormulaLocal = "=СРЗНАЧ(" & DataRange & ")" ' Применяем формулу СРЗНАЧ для ранее записанного диапазона ячеек
+
+Else
+Debug.Print "Не работает"
+End If
+
+DataRange = "" 'Очищаем диапазон ячеек для подстановки в формулу
+
+Next CurrentColumn 'Конец цикла перебора текущей колонки
+
+End Sub
