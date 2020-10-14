@@ -1,108 +1,107 @@
-Attribute VB_Name = "Module1"
 Sub CountMeData()
-' Џеременные рЯдов
-Dim FirstRow As Long ' Џервый рЯд
-Dim CurrentRow As Long '’екущий рЯд
-Dim LastRow As Long ' Џоследний рЯд
+' РџРµСЂРµРјРµРЅРЅС‹Рµ СЂСЏРґРѕРІ
+Dim FirstRow As Long ' РџРµСЂРІС‹Р№ СЂСЏРґ
+Dim CurrentRow As Long 'РўРµРєСѓС‰РёР№ СЂСЏРґ
+Dim LastRow As Long ' РџРѕСЃР»РµРґРЅРёР№ СЂСЏРґ
 FirstRow = 1
 CurrentRow = FirstRow
 LastRow = Selection.Rows.Count
 
-' Џеременные колонок
-Dim FirstColumn As Long ' ЏерваЯ колонка
-Dim CurrentColumn As Long '’екущаЯ колонка
-Dim LastColumn As Long ' ЏоследнЯЯ колонка
+' РџРµСЂРµРјРµРЅРЅС‹Рµ РєРѕР»РѕРЅРѕРє
+Dim FirstColumn As Long ' РџРµСЂРІР°СЏ РєРѕР»РѕРЅРєР°
+Dim CurrentColumn As Long 'РўРµРєСѓС‰Р°СЏ РєРѕР»РѕРЅРєР°
+Dim LastColumn As Long ' РџРѕСЃР»РµРґРЅСЏСЏ РєРѕР»РѕРЅРєР°
 FirstColumn = 1
 CurrentColumn = FirstColumn
 LastColumn = Selection.Columns.Count
 
-' Џеременные длЯ операций над текущими Ячейками вычислений
-Dim ActiveRow As Long ' Ќомер активного рЯда
-Dim ActiveRangeRow As Range ' „иапазон активного рЯда
-Dim ActiveRangeColumn As Range ' „иапазон колонки, в которой производЯтсЯ выЯвление Ячейки
+' РџРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ РѕРїРµСЂР°С†РёР№ РЅР°Рґ С‚РµРєСѓС‰РёРјРё СЏС‡РµР№РєР°РјРё РІС‹С‡РёСЃР»РµРЅРёР№
+Dim ActiveRow As Long ' РќРѕРјРµСЂ Р°РєС‚РёРІРЅРѕРіРѕ СЂСЏРґР°
+Dim ActiveRangeRow As Range ' Р”РёР°РїР°Р·РѕРЅ Р°РєС‚РёРІРЅРѕРіРѕ СЂСЏРґР°
+Dim ActiveRangeColumn As Range ' Р”РёР°РїР°Р·РѕРЅ РєРѕР»РѕРЅРєРё, РІ РєРѕС‚РѕСЂРѕР№ РїСЂРѕРёР·РІРѕРґСЏС‚СЃСЏ РІС‹СЏРІР»РµРЅРёРµ СЏС‡РµР№РєРё
 
-' Џеременные длЯ получениЯ и вывода данных
-Dim DataRange As String ' „иапазон Ячеек длЯ подстановки в формулу
-Dim DataColumn As Long ' —исловой номер колонки на листе
-Dim DataCell As String ' Љакую функцию применЯть к диапазону
-Dim TargetCell As Range   ' –елеваЯ Ячейка, куда записываютсЯ данные
+' РџРµСЂРµРјРµРЅРЅС‹Рµ РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ Рё РІС‹РІРѕРґР° РґР°РЅРЅС‹С…
+Dim DataRange As String ' Р”РёР°РїР°Р·РѕРЅ СЏС‡РµРµРє РґР»СЏ РїРѕРґСЃС‚Р°РЅРѕРІРєРё РІ С„РѕСЂРјСѓР»Сѓ
+Dim DataColumn As Long ' Р§РёСЃР»РѕРІРѕР№ РЅРѕРјРµСЂ РєРѕР»РѕРЅРєРё РЅР° Р»РёСЃС‚Рµ
+Dim DataCell As String ' РљР°РєСѓСЋ С„СѓРЅРєС†РёСЋ РїСЂРёРјРµРЅСЏС‚СЊ Рє РґРёР°РїР°Р·РѕРЅСѓ
+Dim TargetCell As Range   ' Р¦РµР»РµРІР°СЏ СЏС‡РµР№РєР°, РєСѓРґР° Р·Р°РїРёСЃС‹РІР°СЋС‚СЃСЏ РґР°РЅРЅС‹Рµ
 
-' Џеременные, на случай, если в первой строке нужно поделить число из одного рЯда на число из другого, нужно написать буквы рЯдов через :
-Dim LeftCell As String ' Ѓуква слева от двоеточиЯ
-Dim RightCell As String ' Ѓуква справа от двоеточиЯ
+' РџРµСЂРµРјРµРЅРЅС‹Рµ, РЅР° СЃР»СѓС‡Р°Р№, РµСЃР»Рё РІ РїРµСЂРІРѕР№ СЃС‚СЂРѕРєРµ РЅСѓР¶РЅРѕ РїРѕРґРµР»РёС‚СЊ С‡РёСЃР»Рѕ РёР· РѕРґРЅРѕРіРѕ СЂСЏРґР° РЅР° С‡РёСЃР»Рѕ РёР· РґСЂСѓРіРѕРіРѕ, РЅСѓР¶РЅРѕ РЅР°РїРёСЃР°С‚СЊ Р±СѓРєРІС‹ СЂСЏРґРѕРІ С‡РµСЂРµР· :
+Dim LeftCell As String ' Р‘СѓРєРІР° СЃР»РµРІР° РѕС‚ РґРІРѕРµС‚РѕС‡РёСЏ
+Dim RightCell As String ' Р‘СѓРєРІР° СЃРїСЂР°РІР° РѕС‚ РґРІРѕРµС‚РѕС‡РёСЏ
 
-' –икл перебора колонок
+' Р¦РёРєР» РїРµСЂРµР±РѕСЂР° РєРѕР»РѕРЅРѕРє
 For CurrentColumn = FirstColumn To LastColumn
-Debug.Print "’екущий рЯд - " & CurrentColumn
-Set ActiveRangeColumn = Range(Selection.Cells(FirstRow, CurrentColumn), Selection.Cells(LastRow, CurrentColumn)) ' Џолучаем диапазон активной колонки
-Debug.Print "„иапазон активной колонки = " & ActiveRangeColumn.Address
+Debug.Print "РўРµРєСѓС‰РёР№ СЂСЏРґ - " & CurrentColumn
+Set ActiveRangeColumn = Range(Selection.Cells(FirstRow, CurrentColumn), Selection.Cells(LastRow, CurrentColumn)) ' РџРѕР»СѓС‡Р°РµРј РґРёР°РїР°Р·РѕРЅ Р°РєС‚РёРІРЅРѕР№ РєРѕР»РѕРЅРєРё
+Debug.Print "Р”РёР°РїР°Р·РѕРЅ Р°РєС‚РёРІРЅРѕР№ РєРѕР»РѕРЅРєРё = " & ActiveRangeColumn.Address
 
 Debug.Print " "
 
-DataColumn = Range(Selection.Cells(FirstRow, CurrentColumn), Selection.Cells(LastRow, CurrentColumn)).Column 'Џолучаем номер текущей колонки
-DataCell = Cells(1, DataColumn) ' Џолучаем значение Ячейки с функцией на английском Языке из первой Ячейки колонки
+DataColumn = Range(Selection.Cells(FirstRow, CurrentColumn), Selection.Cells(LastRow, CurrentColumn)).Column 'РџРѕР»СѓС‡Р°РµРј РЅРѕРјРµСЂ С‚РµРєСѓС‰РµР№ РєРѕР»РѕРЅРєРё
+DataCell = Cells(1, DataColumn) ' РџРѕР»СѓС‡Р°РµРј Р·РЅР°С‡РµРЅРёРµ СЏС‡РµР№РєРё СЃ С„СѓРЅРєС†РёРµР№ РЅР° Р°РЅРіР»РёР№СЃРєРѕРј СЏР·С‹РєРµ РёР· РїРµСЂРІРѕР№ СЏС‡РµР№РєРё РєРѕР»РѕРЅРєРё
 Set TargetCell = Selection.Cells(LastRow + 1, CurrentColumn)
 Debug.Print "TargetCell = " & TargetCell.Address
 
 
-' …сли в значении Ячейки, где должна хранитьсЯ функциЯ - :
+' Р•СЃР»Рё РІ Р·РЅР°С‡РµРЅРёРё СЏС‡РµР№РєРё, РіРґРµ РґРѕР»Р¶РЅР° С…СЂР°РЅРёС‚СЊСЃСЏ С„СѓРЅРєС†РёСЏ - :
 If InStr(DataCell, ":") > 0 Then
-Debug.Print "„воеточие"
-LeftCell = "$" & Left(DataCell, 1) & "$" & TargetCell.Row ' Џолучаем адрес Ячейки-делимого - слева от двоеточиЯ
-RightCell = "$" & Right(DataCell, 1) & "$" & TargetCell.Row  ' Џолучаем адрес Ячейки-делителЯ - справа от двоеточиЯ
-TargetCell = "=" & LeftCell & "/" & RightCell ' ЏрименЯем деление под активным диапазоном
+Debug.Print "Р”РІРѕРµС‚РѕС‡РёРµ"
+LeftCell = "$" & Left(DataCell, 1) & "$" & TargetCell.Row ' РџРѕР»СѓС‡Р°РµРј Р°РґСЂРµСЃ СЏС‡РµР№РєРё-РґРµР»РёРјРѕРіРѕ - СЃР»РµРІР° РѕС‚ РґРІРѕРµС‚РѕС‡РёСЏ
+RightCell = "$" & Right(DataCell, 1) & "$" & TargetCell.Row  ' РџРѕР»СѓС‡Р°РµРј Р°РґСЂРµСЃ СЏС‡РµР№РєРё-РґРµР»РёС‚РµР»СЏ - СЃРїСЂР°РІР° РѕС‚ РґРІРѕРµС‚РѕС‡РёСЏ
+TargetCell = "=" & LeftCell & "/" & RightCell ' РџСЂРёРјРµРЅСЏРµРј РґРµР»РµРЅРёРµ РїРѕРґ Р°РєС‚РёРІРЅС‹Рј РґРёР°РїР°Р·РѕРЅРѕРј
 
-' …сли в значении Ячейки, где должна хранитьсЯ функциЯ - Ћ—€‘’€’њ
-ElseIf DataCell = "Ћ—€‘’€’њ" Then
-Debug.Print "Ћчистить"
-TargetCell = "" ' ‡аполнЯем Ячейку под активным диапазоном пустотой
+' Р•СЃР»Рё РІ Р·РЅР°С‡РµРЅРёРё СЏС‡РµР№РєРё, РіРґРµ РґРѕР»Р¶РЅР° С…СЂР°РЅРёС‚СЊСЃСЏ С„СѓРЅРєС†РёСЏ - РћР§РРЎРўРРўР¬
+ElseIf DataCell = "РћР§РРЎРўРРўР¬" Then
+Debug.Print "РћС‡РёСЃС‚РёС‚СЊ"
+TargetCell = "" ' Р—Р°РїРѕР»РЅСЏРµРј СЏС‡РµР№РєСѓ РїРѕРґ Р°РєС‚РёРІРЅС‹Рј РґРёР°РїР°Р·РѕРЅРѕРј РїСѓСЃС‚РѕС‚РѕР№
 
-' …сли значение Ячейки, где должна хранитьсЯ функциЯ - ‘“ЊЊ
-ElseIf DataCell = "‘“ЊЊ" Then
-Debug.Print "‘“ЊЊ"
+' Р•СЃР»Рё Р·РЅР°С‡РµРЅРёРµ СЏС‡РµР№РєРё, РіРґРµ РґРѕР»Р¶РЅР° С…СЂР°РЅРёС‚СЊСЃСЏ С„СѓРЅРєС†РёСЏ - РЎРЈРњРњ
+ElseIf DataCell = "РЎРЈРњРњ" Then
+Debug.Print "РЎРЈРњРњ"
 
 DataRange = RowIteration(CurrentColumn)
-TargetCell.FormulaLocal = "=‘“ЊЊ(" & DataRange & ")" ' ЏрименЯем формулу ‘“ЊЊ длЯ ранее записанного диапазона Ячеек
+TargetCell.FormulaLocal = "=РЎРЈРњРњ(" & DataRange & ")" ' РџСЂРёРјРµРЅСЏРµРј С„РѕСЂРјСѓР»Сѓ РЎРЈРњРњ РґР»СЏ СЂР°РЅРµРµ Р·Р°РїРёСЃР°РЅРЅРѕРіРѕ РґРёР°РїР°Р·РѕРЅР° СЏС‡РµРµРє
 
-' …сли значение Ячейки, где должна хранитьсЯ функциЯ - ‘ђ‡ЌЂ—
-ElseIf DataCell = "‘ђ‡ЌЂ—" Then
-Debug.Print "‘ђ‡ЌЂ—"
+' Р•СЃР»Рё Р·РЅР°С‡РµРЅРёРµ СЏС‡РµР№РєРё, РіРґРµ РґРѕР»Р¶РЅР° С…СЂР°РЅРёС‚СЊСЃСЏ С„СѓРЅРєС†РёСЏ - РЎР Р—РќРђР§
+ElseIf DataCell = "РЎР Р—РќРђР§" Then
+Debug.Print "РЎР Р—РќРђР§"
 DataRange = RowIteration(CurrentColumn)
-TargetCell.FormulaLocal = "=‘ђ‡ЌЂ—(" & DataRange & ")" ' ПрименЯем формулу ‘ђ‡ЌЂ— длЯ ранее записанного диапазона Ячеек
+TargetCell.FormulaLocal = "=РЎР Р—РќРђР§(" & DataRange & ")" ' С•СЂРёРјРµРЅСЏРµРј С„РѕСЂРјСѓР»Сѓ РЎР Р—РќРђР§ РґР»СЏ СЂР°РЅРµРµ Р·Р°РїРёСЃР°РЅРЅРѕРіРѕ РґРёР°РїР°Р·РѕРЅР° СЏС‡РµРµРє
 
 Else
-Debug.Print "не работает"
+Debug.Print "РЅРµ СЂР°Р±РѕС‚Р°РµС‚"
 End If
 
-'DataRange = "" ' Ћчищаем диапазон Ячеек длЯ подстановки в формулу
+'DataRange = "" ' РћС‡РёС‰Р°РµРј РґРёР°РїР°Р·РѕРЅ СЏС‡РµРµРє РґР»СЏ РїРѕРґСЃС‚Р°РЅРѕРІРєРё РІ С„РѕСЂРјСѓР»Сѓ
 
-Next CurrentColumn ' Љонец цикла перебора текущей колонки
+Next CurrentColumn ' РљРѕРЅРµС† С†РёРєР»Р° РїРµСЂРµР±РѕСЂР° С‚РµРєСѓС‰РµР№ РєРѕР»РѕРЅРєРё
 
 End Sub
 
 Function RowIteration(CurrentColumn As Long) As String
-' Џеременные рЯдов
-Dim FirstRow As Long ' Џервый рЯд
-Dim CurrentRow As Long ' ’екущий рЯд
-Dim LastRow As Long ' Џоследний рЯд
+' РџРµСЂРµРјРµРЅРЅС‹Рµ СЂСЏРґРѕРІ
+Dim FirstRow As Long ' РџРµСЂРІС‹Р№ СЂСЏРґ
+Dim CurrentRow As Long ' РўРµРєСѓС‰РёР№ СЂСЏРґ
+Dim LastRow As Long ' РџРѕСЃР»РµРґРЅРёР№ СЂСЏРґ
 FirstRow = 1
 CurrentRow = FirstRow
 LastRow = Selection.Rows.Count
-Dim ActiveCell As Range ' ЂктивнаЯ Ячейка
+Dim ActiveCell As Range ' РђРєС‚РёРІРЅР°СЏ СЏС‡РµР№РєР°
 
-' –икл перебора рЯдов
-For CurrentRow = FirstRow To LastRow ' –икл проходит текущим рЯдом от первого рЯда до последнего рЯда
-Set ActiveCell = Selection.Cells(CurrentRow, CurrentColumn) ' Џолучаем активную Ячейку
-Debug.Print "ЂктивнаЯ Ячейка - " & ActiveCell.Address
-ActiveRow = ActiveCell.Row ' Получаем активный рЯд
-Debug.Print "Ђктивный рЯд - " & ActiveRow
+' Р¦РёРєР» РїРµСЂРµР±РѕСЂР° СЂСЏРґРѕРІ
+For CurrentRow = FirstRow To LastRow ' Р¦РёРєР» РїСЂРѕС…РѕРґРёС‚ С‚РµРєСѓС‰РёРј СЂСЏРґРѕРј РѕС‚ РїРµСЂРІРѕРіРѕ СЂСЏРґР° РґРѕ РїРѕСЃР»РµРґРЅРµРіРѕ СЂСЏРґР°
+Set ActiveCell = Selection.Cells(CurrentRow, CurrentColumn) ' РџРѕР»СѓС‡Р°РµРј Р°РєС‚РёРІРЅСѓСЋ СЏС‡РµР№РєСѓ
+Debug.Print "РђРєС‚РёРІРЅР°СЏ СЏС‡РµР№РєР° - " & ActiveCell.Address
+ActiveRow = ActiveCell.Row ' С•РѕР»СѓС‡Р°РµРј Р°РєС‚РёРІРЅС‹Р№ СЂСЏРґ
+Debug.Print "РђРєС‚РёРІРЅС‹Р№ СЂСЏРґ - " & ActiveRow
 
-' ЏроверЯем вложенность активного рЯда
+' РџСЂРѕРІРµСЂСЏРµРј РІР»РѕР¶РµРЅРЅРѕСЃС‚СЊ Р°РєС‚РёРІРЅРѕРіРѕ СЂСЏРґР°
 If Rows(ActiveRow).OutlineLevel = 1 Then
-Debug.Print "не сгруппировано"
-RowIteration = RowIteration + ActiveCell.Address + ";" ' …сли рЯд не сгруппирован, дописываем его в диапазон Ячеек длЯ подстановки в формулу
+Debug.Print "РЅРµ СЃРіСЂСѓРїРїРёСЂРѕРІР°РЅРѕ"
+RowIteration = RowIteration + ActiveCell.Address + ";" ' Р•СЃР»Рё СЂСЏРґ РЅРµ СЃРіСЂСѓРїРїРёСЂРѕРІР°РЅ, РґРѕРїРёСЃС‹РІР°РµРј РµРіРѕ РІ РґРёР°РїР°Р·РѕРЅ СЏС‡РµРµРє РґР»СЏ РїРѕРґСЃС‚Р°РЅРѕРІРєРё РІ С„РѕСЂРјСѓР»Сѓ
 Debug.Print "RowIteration = "; RowIteration; ""
 End If
 
-Next CurrentRow ' Љонец цикла перебора рЯдов
+Next CurrentRow ' РљРѕРЅРµС† С†РёРєР»Р° РїРµСЂРµР±РѕСЂР° СЂСЏРґРѕРІ
 End Function
