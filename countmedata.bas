@@ -1,107 +1,107 @@
 Sub CountMeData()
-' ѕеременные р€дов
-Dim FirstRow As Long ' ѕервый р€д
-Dim CurrentRow As Long '“екущий р€д
-Dim LastRow As Long 'ѕоследний р€д
+' Переменные рядов
+Dim FirstRow As Long ' Первый ряд
+Dim CurrentRow As Long 'Текущий ряд
+Dim LastRow As Long ' Последний ряд
 FirstRow = 1
 CurrentRow = FirstRow
 LastRow = Selection.Rows.Count
 
-' ѕеременные колонок
-Dim FirstColumn As Long ' ѕерва€ колонка
-Dim CurrentColumn As Long '“екуща€ колонка
-Dim LastColumn As Long 'ѕоследн€€ колонка
+' Переменные колонок
+Dim FirstColumn As Long ' Первая колонка
+Dim CurrentColumn As Long 'Текущая колонка
+Dim LastColumn As Long ' Последняя колонка
 FirstColumn = 1
 CurrentColumn = FirstColumn
 LastColumn = Selection.Columns.Count
 
-' ѕеременные дл€ операций над текущими €чейками вычислений
-Dim ActiveRow As Long 'Ќомер активного р€да
-Dim ActiveRangeRow As Range 'ƒиапазон активного р€да
-Dim ActiveRangeColumn As Range 'ƒиапазон колонки, в которой производ€тс€ вы€вление €чейки
+' Переменные для операций над текущими ячейками вычислений
+Dim ActiveRow As Long ' Номер активного ряда
+Dim ActiveRangeRow As Range ' Диапазон активного ряда
+Dim ActiveRangeColumn As Range ' Диапазон колонки, в которой производятся выявление ячейки
 
-' ѕеременные дл€ получени€ и вывода данных
-Dim DataRange As String 'ƒиапазон €чеек дл€ подстановки в формулу
-Dim DataColumn As Long '„исловой номер колонки на листе
-Dim DataCell As String '‘ункци€ на английском €зыке
-Dim TargetCell As Range
+' Переменные для получения и вывода данных
+Dim DataRange As String ' Диапазон ячеек для подстановки в формулу
+Dim DataColumn As Long ' Числовой номер колонки на листе
+Dim DataCell As String ' Какую функцию применять к диапазону
+Dim TargetCell As Range   ' Целевая ячейка, куда записываются данные
 
-' ѕеременные, на случай, если в первой строке нужно поделить число из одного р€да на число из другого, нужно написать буквы р€дов через :
-Dim LeftCell As String 'Ѕуква слева от двоеточи€
-Dim RightCell As String 'Ѕуква справа от двоеточи€
+' Переменные, на случай, если в первой строке нужно поделить число из одного ряда на число из другого, нужно написать буквы рядов через :
+Dim LeftCell As String ' Буква слева от двоеточия
+Dim RightCell As String ' Буква справа от двоеточия
 
-' ÷икл перебора колонок
+' Цикл перебора колонок
 For CurrentColumn = FirstColumn To LastColumn
-Debug.Print "“екущий р€д - " & CurrentColumn
-Set ActiveRangeColumn = Range(Selection.Cells(FirstRow, CurrentColumn), Selection.Cells(LastRow, CurrentColumn)) ' ѕолучаем диапазон активной колонки
-Debug.Print "ƒиапазон активной колонки = " & ActiveRangeColumn.Address
+Debug.Print "Текущий ряд - " & CurrentColumn
+Set ActiveRangeColumn = Range(Selection.Cells(FirstRow, CurrentColumn), Selection.Cells(LastRow, CurrentColumn)) ' Получаем диапазон активной колонки
+Debug.Print "Диапазон активной колонки = " & ActiveRangeColumn.Address
 
 Debug.Print " "
 
-DataColumn = Range(Selection.Cells(FirstRow, CurrentColumn), Selection.Cells(LastRow, CurrentColumn)).Column 'ѕолучаем номер текущей колонки
-DataCell = Cells(1, DataColumn) ' ѕолучаем значение €чейки с функцией на английском €зыке из первой €чейки колонки
+DataColumn = Range(Selection.Cells(FirstRow, CurrentColumn), Selection.Cells(LastRow, CurrentColumn)).Column 'Получаем номер текущей колонки
+DataCell = Cells(1, DataColumn) ' Получаем значение ячейки с функцией на английском языке из первой ячейки колонки
 Set TargetCell = Selection.Cells(LastRow + 1, CurrentColumn)
 Debug.Print "TargetCell = " & TargetCell.Address
 
 
-' ≈сли в значении €чейки, где должна хранитьс€ функци€ - :
+' Если в значении ячейки, где должна храниться функция - :
 If InStr(DataCell, ":") > 0 Then
-Debug.Print "ƒвоеточие"
-LeftCell = "$" & Left(DataCell, 1) & "$" & TargetCell.Row 'ѕолучаем адрес €чейки-делимого - слева от двоеточи€
-RightCell = "$" & Right(DataCell, 1) & "$" & TargetCell.Row  'ѕолучаем адрес €чейки-делител€ - справа от двоеточи€
-TargetCell = "=" & LeftCell & "/" & RightCell 'ѕримен€ем деление под активным диапазоном
+Debug.Print "Двоеточие"
+LeftCell = "$" & Left(DataCell, 1) & "$" & TargetCell.Row ' Получаем адрес ячейки-делимого - слева от двоеточия
+RightCell = "$" & Right(DataCell, 1) & "$" & TargetCell.Row  ' Получаем адрес ячейки-делителя - справа от двоеточия
+TargetCell = "=" & LeftCell & "/" & RightCell ' Применяем деление под активным диапазоном
 
-' ≈сли в значении €чейки, где должна хранитьс€ функци€ - ќ„»—“»“№
-ElseIf DataCell = "ќ„»—“»“№" Then
-Debug.Print "ќчистить"
-TargetCell = "" '«аполн€ем €чейку под активным диапазоном пустотой
+' Если в значении ячейки, где должна храниться функция - ОЧИСТИТЬ
+ElseIf DataCell = "ОЧИСТИТЬ" Then
+Debug.Print "Очистить"
+TargetCell = "" ' Заполняем ячейку под активным диапазоном пустотой
 
-' ≈сли значение €чейки, где должна хранитьс€ функци€ - —”ћћ
-ElseIf DataCell = "—”ћћ" Then
-Debug.Print "—”ћћ"
+' Если значение ячейки, где должна храниться функция - СУММ
+ElseIf DataCell = "СУММ" Then
+Debug.Print "СУММ"
 
 DataRange = RowIteration(CurrentColumn)
-TargetCell.FormulaLocal = "=—”ћћ(" & DataRange & ")" 'ѕримен€ем формулу —”ћћ дл€ ранее записанного диапазона €чеек
+TargetCell.FormulaLocal = "=СУММ(" & DataRange & ")" ' Применяем формулу СУММ для ранее записанного диапазона ячеек
 
-' ≈сли значение €чейки, где должна хранитьс€ функци€ - —–«Ќј„
-ElseIf DataCell = "—–«Ќј„" Then
-Debug.Print "—–«Ќј„"
+' Если значение ячейки, где должна храниться функция - СРЗНАЧ
+ElseIf DataCell = "СРЗНАЧ" Then
+Debug.Print "СРЗНАЧ"
 DataRange = RowIteration(CurrentColumn)
-TargetCell.FormulaLocal = "=—–«Ќј„(" & DataRange & ")" ' ѕримен€ем формулу —–«Ќј„ дл€ ранее записанного диапазона €чеек
+TargetCell.FormulaLocal = "=СРЗНАЧ(" & DataRange & ")" ' ѕрименяем формулу СРЗНАЧ для ранее записанного диапазона ячеек
 
 Else
-Debug.Print "Ќе работает"
+Debug.Print "не работает"
 End If
 
-'DataRange = "" 'ќчищаем диапазон €чеек дл€ подстановки в формулу
+'DataRange = "" ' Очищаем диапазон ячеек для подстановки в формулу
 
-Next CurrentColumn ' онец цикла перебора текущей колонки
+Next CurrentColumn ' Конец цикла перебора текущей колонки
 
 End Sub
 
 Function RowIteration(CurrentColumn As Long) As String
-' ѕеременные р€дов
-Dim FirstRow As Long ' ѕервый р€д
-Dim CurrentRow As Long '“екущий р€д
-Dim LastRow As Long 'ѕоследний р€д
+' Переменные рядов
+Dim FirstRow As Long ' Первый ряд
+Dim CurrentRow As Long ' Текущий ряд
+Dim LastRow As Long ' Последний ряд
 FirstRow = 1
 CurrentRow = FirstRow
 LastRow = Selection.Rows.Count
-Dim ActiveCell As Range ' јктивна€ €чейка
+Dim ActiveCell As Range ' Активная ячейка
 
-'÷икл перебора р€дов
-For CurrentRow = FirstRow To LastRow '÷икл проходит текущим р€дом от первого р€да до последнего р€да
-Set ActiveCell = Selection.Cells(CurrentRow, CurrentColumn) ' ѕолучаем активную €чейку
-Debug.Print "јктивна€ €чейка - " & ActiveCell.Address
-ActiveRow = ActiveCell.Row ' ѕолучаем активный р€д
-Debug.Print "јктивный р€д - " & ActiveRow
+' Цикл перебора рядов
+For CurrentRow = FirstRow To LastRow ' Цикл проходит текущим рядом от первого ряда до последнего ряда
+Set ActiveCell = Selection.Cells(CurrentRow, CurrentColumn) ' Получаем активную ячейку
+Debug.Print "Активная ячейка - " & ActiveCell.Address
+ActiveRow = ActiveCell.Row ' ѕолучаем активный ряд
+Debug.Print "Активный ряд - " & ActiveRow
 
-' ѕровер€ем вложенность активного р€да
+' Проверяем вложенность активного ряда
 If Rows(ActiveRow).OutlineLevel = 1 Then
-Debug.Print "Ќе сгруппировано"
-RowIteration = RowIteration + ActiveCell.Address + ";" ' ≈сли р€д не сгруппирован, дописываем его в ƒиапазон €чеек дл€ подстановки в формулу
+Debug.Print "не сгруппировано"
+RowIteration = RowIteration + ActiveCell.Address + ";" ' Если ряд не сгруппирован, дописываем его в диапазон ячеек для подстановки в формулу
 Debug.Print "RowIteration = "; RowIteration; ""
 End If
 
-Next CurrentRow '  онец цикла перебора р€дов
+Next CurrentRow ' Конец цикла перебора рядов
 End Function
